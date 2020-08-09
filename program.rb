@@ -10,16 +10,28 @@ while keepGoing == true
 
 puts "Hello! Would you like to:"
 puts "1. See all of your recipes"
-puts "2. Add a recipe"
-puts "3. Add an ingredient"
-puts "4. quit"
+puts "2. Find a recipe"
+puts "3. Add a recipe"
+puts "4. See all of your ingredients"
+puts "5. Find an ingredient"
+puts "6. Add an ingredient"
+puts "7. quit"
 
 choice = gets.chomp
 
 if choice == "1"
-    #add code to see all recipes - will need to create a Recipes Class to complete this.
-    get_recipe
+    #see all recipes
+    allRecipes = Recipe.new
+    allRecipes.show_recipe
 elsif choice == "2"
+    #find one recipe
+    puts "Which recipe would you like to see?"
+    recipe = gets.chomp.downcase
+    chosenRecipe = Recipe.new
+    chosenRecipe.recipeName = recipe
+    chosenRecipe.show_recipe
+elsif choice == "3"
+    #add a recipe
     puts "What recipe would you like to add today?"
     recipe = gets.chomp.downcase
 
@@ -52,8 +64,20 @@ elsif choice == "2"
 
     #adds all of the information to the recipes and joiner tables
     add_recipe recipe, description, recipeIngredients
+elsif choice == "4"
+    #see all ingredients
+    allIngredients = Ingredient.new
+    allIngredients.show_ingredient
+elsif choice == "5"
+    #find an ingredient
+    puts "What ingredient would you like to see?"
+    ingredient = gets.chomp.downcase
+    chosenIngredient = Ingredient.new
+    chosenIngredient.ingredientName = ingredient
+    chosenIngredient.show_ingredient
 
-elsif choice == "3"
+elsif choice == "6"
+    #add an ingredient
     puts "What ingredient would you like to add to your recipe book?"
     ingredient = gets.chomp.downcase
 
@@ -72,7 +96,8 @@ elsif choice == "3"
     puts "Your ingredient has been added!"
     add_ingredient ingredient, price
 
-elsif choice == "4"
+elsif choice == "7"
+    #quit
     keepGoing = false
     puts "Have a good day!"
 else 
