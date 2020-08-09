@@ -6,18 +6,15 @@ class Ingredient
        get_ingredient
 
        @ingredientArray.each do |x|
-            if @ingredientName == nil
-                puts x
-            else
-                puts "Ingredient: #{x[1]}"
-                puts "Price: $#{x[2]}"
-                puts "Recipes:"
-                @ingredientID = x[0]
-                get_ingredient_recipes
-                @ingredientRecipesArray.each do |y|
-                    puts y
-                end
+            puts "Ingredient: #{x[1]}"
+            puts "Price: $#{x[2]}"
+            puts "Recipes:"
+            @ingredientID = x[0]
+            get_ingredient_recipes
+            @ingredientRecipesArray.each do |y|
+                puts y
             end
+            puts
        end
     end
 
@@ -37,7 +34,7 @@ class Ingredient
             command = DB.prepare "SELECT * FROM Ingredients"
             reader = command.execute
             reader.each do |y|
-                @ingredientArray << y[1]
+                @ingredientArray << y
             end
             command.close if command
         else 
@@ -71,12 +68,20 @@ def check_ingredient x
     end
     recipeArray << tempVar
 
+    ingredientArray = Array.new
+    command = DB.prepare "SELECT ingredient FROM Ingredients"
+    reader = command.execute
+    reader.each do |y|
+        ingredientArray << y[0]
+    end
+    command.close if command
+
     recipeArray.each do |recipeIngredient|
-        if get_ingredient.include?(recipeIngredient)
-            # puts "#{recipeIngredient} already exists"
+        if ingredientArray.include?(recipeIngredient)
+            #puts "#{recipeIngredient} already exists"
         else
             newIngredientArray << recipeIngredient
-            # puts "#{recipeIngredient} does not exist"
+            #puts "#{recipeIngredient} does not exist"
         end
     end
     return newIngredientArray

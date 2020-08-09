@@ -70,7 +70,6 @@ end
 
 def add_recipe_ingredients r, i
     i.each do |x|
-        print x
         command = DB.prepare "INSERT INTO joiner (recipeID, ingredientID) VALUES (#{r}, #{x[0]})"
         command.execute
         command.close if command
