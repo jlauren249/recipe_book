@@ -16,6 +16,8 @@ puts "4. See all of your ingredients"
 puts "5. Find an ingredient"
 puts "6. Add an ingredient"
 puts "7. quit"
+puts
+puts "8. Find which ingredients are used together the most"
 
 choice = gets.chomp
 
@@ -100,6 +102,13 @@ elsif choice == "7"
     #quit
     keepGoing = false
     puts "Have a good day!"
+
+elsif choice == "8"
+    puts "press enter to begin"
+    gets
+
+    compare_ingredients
+
 else 
     puts "Please enter a valid selection."
     puts

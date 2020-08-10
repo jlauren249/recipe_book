@@ -46,7 +46,6 @@ class Recipe
             command.close if command
         end
     end
-
 end
 
 def add_recipe r, d, i

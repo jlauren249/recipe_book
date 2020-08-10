@@ -34,7 +34,7 @@ class Ingredient
             command = DB.prepare "SELECT * FROM Ingredients"
             reader = command.execute
             reader.each do |y|
-                @ingredientArray << y
+                @ingredientArray << y 
             end
             command.close if command
         else 
@@ -46,6 +46,80 @@ class Ingredient
             command.close if command
         end   
     end
+
+    def get_recipes
+        recipesArray = Array.new
+        command = DB.prepare "SELECT Recipes.recipeName FROM Recipes JOIN joiner ON Recipes.recipeID=joiner.recipeID WHERE joiner.ingredientID=(SELECT Ingredients.ingredientID FROM Ingredients WHERE Ingredients.ingredient='#{@ingredientName}')"
+        reader = command.execute
+        reader.each do |x|
+            recipesArray << x[0]
+        end
+        command.close if command
+        return recipesArray
+    end
+end
+
+def compare_ingredients
+    ingredientsArray = Array.new
+    command = DB.prepare "SELECT ingredient FROM Ingredients"
+    reader = command.execute
+    reader.each do |x|
+        ingredientsArray << x[0]
+    end
+    command.close if command
+    # print ingredientsArray
+
+    # puts ingredientsArray.length
+
+    # ingredientsArray.each do |ingredient|
+    #     var = ingredient
+    #     puts "var is #{var}"
+    #     puts "ingredient is #{ingredient}"
+    #     var = Ingredient.new
+    #     var.ingredientName = ingredient
+    #     recipesArray = var.get_recipes
+    #     puts
+    # end
+
+    most_shared = 0
+    most_shared_ing = ""
+    while ingredientsArray.length != 0
+        i = 0
+        x = 1
+        (0..ingredientsArray.length).each do
+            var = ingredientsArray[i]
+            var1 = ingredientsArray[x]
+
+            # puts "var is #{ingredientsArray[i]}"
+            # puts "var1 is #{ingredientsArray[x]}"
+
+            var = Ingredient.new
+            var.ingredientName = ingredientsArray[i]
+            var.get_recipes
+
+            var1 = Ingredient.new
+            var1.ingredientName = ingredientsArray[x]
+            var1.get_recipes
+
+            sharedrecipesArray = Array.new
+            sharedrecipesArray = var.get_recipes & var1.get_recipes
+            # print "sharedrecipesArray = #{sharedrecipesArray}"
+            # puts
+            # puts sharedrecipesArray.length
+            # puts
+            if most_shared < sharedrecipesArray.length 
+                most_shared = sharedrecipesArray.length
+                most_shared_ing = ingredientsArray[i] + ingredientsArray[x]
+            end
+            # puts "most_shared is #{most_shared}"
+            # puts "most_shared_ing is #{most_shared_ing}"
+            x = x + 1
+        end
+        ingredientsArray.delete_at(0)
+        # print ingredientsArray
+    end
+    puts "most_shared is #{most_shared}"
+    puts "most_shared_ing is #{most_shared_ing}"
 end
 
 def add_ingredient i, p
